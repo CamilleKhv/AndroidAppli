@@ -316,7 +316,7 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
 @Composable
 fun SideBar(navController: NavController, currentDestination: NavDestination?) {
     Column(modifier = Modifier.fillMaxHeight()) {
-        NavigationRail(containerColor = Color.Red){
+        NavigationRail(containerColor = Color.Yellow){
             NavigationRailItem(
                 modifier = Modifier.weight(1f),
                 icon = {
