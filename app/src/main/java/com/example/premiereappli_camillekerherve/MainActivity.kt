@@ -103,76 +103,65 @@ fun BarreNavigation() {
         bottomBar = {
             if (currentDestination?.hasRoute<HomeDest>() != true) {
                 when (classWidth) {
-                    WindowWidthSizeClass.COMPACT ->
-                        BottomBar(navController, currentDestination)
-                    else ->{}
+                    WindowWidthSizeClass.COMPACT -> BottomBar(navController, currentDestination)
+                    else -> {}
                 }
             }
         },
     ) { innerPadding ->
-        Row {
-            if (currentDestination?.hasRoute<HomeDest>() != true) {
-                when (classWidth) {
-                    WindowWidthSizeClass.COMPACT -> {
-                    }
+        Row(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            if (classWidth != WindowWidthSizeClass.COMPACT && currentDestination?.hasRoute<HomeDest>() != true) {
+                SideBar(navController, currentDestination)
+            }
+            Column(modifier = Modifier.fillMaxSize()) {
+                NavHost(
+                    navController = navController, startDestination = HomeDest(),
+                    Modifier.fillMaxSize()
+                ) {
+                    composable<HomeDest> { Screen(navController, windowSizeClass) }
+                    composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
+                    composable<ActeursDest> { ScreenActeurs(viewModel, navController) }
+                    composable<SeriesDest> { ScreenSeries(viewModel, navController) }
 
-                    else -> {
-                        Column(modifier = Modifier.padding(innerPadding)) {
-                            SideBar(navController, currentDestination)
+                    composable(
+                        "filmDetails/{filmId}",
+                        arguments = listOf(navArgument("filmId") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val filmId = backStackEntry.arguments?.getInt("filmId")
+                        filmId?.let {
+                            ScreenFilmsDetails(
+                                viewModel = viewModel,
+                                filmId = it,
+                                navController
+                            )
                         }
                     }
-                }
-            }
-        }
-        Column {
-            NavHost(
-                navController = navController, startDestination = HomeDest(),
-                Modifier.padding(innerPadding)
-                    .fillMaxSize()
-            ) {
-                composable<HomeDest> { Screen(navController, windowSizeClass) }
-                composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
-                composable<ActeursDest> { ScreenActeurs(viewModel, navController) }
-                composable<SeriesDest> { ScreenSeries(viewModel, navController) }
 
-                composable(
-                    "filmDetails/{filmId}",
-                    arguments = listOf(navArgument("filmId") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    val filmId = backStackEntry.arguments?.getInt("filmId")
-                    filmId?.let {
-                        ScreenFilmsDetails(
-                            viewModel = viewModel,
-                            filmId = it,
-                            navController
-                        )
+                    composable(
+                        "serieDetails/{serieId}",
+                        arguments = listOf(navArgument("serieId") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val serieId = backStackEntry.arguments?.getInt("serieId")
+                        serieId?.let {
+                            ScreenSeriesDetails(
+                                viewModel = viewModel,
+                                serieId = it,
+                                navController
+                            )
+                        }
                     }
-                }
 
-                composable(
-                    "serieDetails/{serieId}",
-                    arguments = listOf(navArgument("serieId") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    val serieId = backStackEntry.arguments?.getInt("serieId")
-                    serieId?.let {
-                        ScreenSeriesDetails(
-                            viewModel = viewModel,
-                            serieId = it,
-                            navController
-                        )
-                    }
-                }
-
-                composable(
-                    "acteurDetails/{actorId}",
-                    arguments = listOf(navArgument("actorId") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    val actorId = backStackEntry.arguments?.getInt("actorId")
-                    actorId?.let {
-                        ScreenActeursDetails(
-                            viewModel = viewModel,
-                            acteurId = it
-                        )
+                    composable(
+                        "acteurDetails/{actorId}",
+                        arguments = listOf(navArgument("actorId") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val actorId = backStackEntry.arguments?.getInt("actorId")
+                        actorId?.let {
+                            ScreenActeursDetails(
+                                viewModel = viewModel,
+                                acteurId = it
+                            )
+                        }
                     }
                 }
             }
@@ -328,7 +317,7 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
 @Composable
 fun SideBar(navController: NavController, currentDestination: NavDestination?) {
     Column(modifier = Modifier.fillMaxHeight()) {
-        NavigationRail(containerColor = Color.Yellow){
+        NavigationRail{
             NavigationRailItem(
                 modifier = Modifier.weight(1f),
                 icon = {
