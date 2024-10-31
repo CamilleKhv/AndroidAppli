@@ -105,63 +105,75 @@ fun BarreNavigation() {
                 when (classWidth) {
                     WindowWidthSizeClass.COMPACT ->
                         BottomBar(navController, currentDestination)
-
-                    else ->
-                        Row(modifier = Modifier.fillMaxSize()){
-                            SideBar(navController, currentDestination)}
+                    else ->{}
                 }
             }
         },
-        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        NavHost(
-            navController = navController, startDestination = HomeDest(),
-            Modifier.padding(innerPadding)
-            .fillMaxSize()
-        ) {
-            composable<HomeDest> { Screen(navController, windowSizeClass) }
-            composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
-            composable<ActeursDest> { ScreenActeurs(viewModel, navController) }
-            composable<SeriesDest> { ScreenSeries(viewModel, navController) }
+        Row {
+            if (currentDestination?.hasRoute<HomeDest>() != true) {
+                when (classWidth) {
+                    WindowWidthSizeClass.COMPACT -> {
+                    }
 
-            composable(
-                "filmDetails/{filmId}",
-                arguments = listOf(navArgument("filmId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val filmId = backStackEntry.arguments?.getInt("filmId")
-                filmId?.let {
-                    ScreenFilmsDetails(
-                        viewModel = viewModel,
-                        filmId = it,
-                        navController
-                    )
+                    else -> {
+                        Column(modifier = Modifier.padding(innerPadding)) {
+                            SideBar(navController, currentDestination)
+                        }
+                    }
                 }
             }
+        }
+        Column {
+            NavHost(
+                navController = navController, startDestination = HomeDest(),
+                Modifier.padding(innerPadding)
+                    .fillMaxSize()
+            ) {
+                composable<HomeDest> { Screen(navController, windowSizeClass) }
+                composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
+                composable<ActeursDest> { ScreenActeurs(viewModel, navController) }
+                composable<SeriesDest> { ScreenSeries(viewModel, navController) }
 
-            composable(
-                "serieDetails/{serieId}",
-                arguments = listOf(navArgument("serieId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val serieId = backStackEntry.arguments?.getInt("serieId")
-                serieId?.let {
-                    ScreenSeriesDetails(
-                        viewModel = viewModel,
-                        serieId = it,
-                        navController
-                    )
+                composable(
+                    "filmDetails/{filmId}",
+                    arguments = listOf(navArgument("filmId") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val filmId = backStackEntry.arguments?.getInt("filmId")
+                    filmId?.let {
+                        ScreenFilmsDetails(
+                            viewModel = viewModel,
+                            filmId = it,
+                            navController
+                        )
+                    }
                 }
-            }
 
-            composable(
-                "acteurDetails/{actorId}",
-                arguments = listOf(navArgument("actorId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                val actorId = backStackEntry.arguments?.getInt("actorId")
-                actorId?.let {
-                    ScreenActeursDetails(
-                        viewModel = viewModel,
-                        acteurId = it
-                    )
+                composable(
+                    "serieDetails/{serieId}",
+                    arguments = listOf(navArgument("serieId") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val serieId = backStackEntry.arguments?.getInt("serieId")
+                    serieId?.let {
+                        ScreenSeriesDetails(
+                            viewModel = viewModel,
+                            serieId = it,
+                            navController
+                        )
+                    }
+                }
+
+                composable(
+                    "acteurDetails/{actorId}",
+                    arguments = listOf(navArgument("actorId") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val actorId = backStackEntry.arguments?.getInt("actorId")
+                    actorId?.let {
+                        ScreenActeursDetails(
+                            viewModel = viewModel,
+                            acteurId = it
+                        )
+                    }
                 }
             }
         }
