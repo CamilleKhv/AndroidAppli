@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -71,8 +72,11 @@ fun ScreenFilms(viewModel: MainViewModel= viewModel(), navController: NavControl
 
 @Composable
 fun MovieItem(movie: ModelMovies, navController: NavController){
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val classWidth = windowSizeClass.windowWidthSizeClass
+
     Column(modifier = Modifier
-        .padding(4.dp)
+        .padding(5.dp)
         .clickable {
             navController.navigate("filmDetails/${movie.id}")
         }
@@ -82,21 +86,44 @@ fun MovieItem(movie: ModelMovies, navController: NavController){
         )
         .padding(8.dp)
     ) {
-        if (movie.poster_path != null) {
-            AsyncImage(
-                model = "https://image.tmdb.org/t/p/w780${movie.poster_path}",
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(4.dp),
-            )
-        }else{
-            Image(
-                painter = painterResource(R.drawable.paysage),  // Image locale dans drawable
-                contentDescription = "Description de l'image",
-                modifier = Modifier
-                    .fillMaxSize()
-            )
+        when (classWidth) {
+            WindowWidthSizeClass.COMPACT ->
+                if (movie.poster_path != null) {
+
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w780${movie.poster_path}",
+                        contentDescription = null,
+                        modifier = Modifier
+
+                            .fillMaxSize()
+                            .padding(4.dp),
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.paysage),
+                        contentDescription = "Description de l'image",
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+                }
+            else ->
+                if (movie.poster_path != null) {
+
+                AsyncImage(
+                    model = "https://image.tmdb.org/t/p/w780${movie.poster_path}",
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(350.dp, 400.dp)
+                        .padding(4.dp),
+                )
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.paysage),
+                    contentDescription = "Description de l'image",
+                    modifier = Modifier
+                        .size(350.dp, 400.dp)
+                )
+            }
         }
         Text(movie.title)
     }

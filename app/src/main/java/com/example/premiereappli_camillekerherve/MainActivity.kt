@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -42,7 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -52,6 +51,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.compose.material3.FloatingActionButton
 import com.example.premiereappli_camillekerherve.ui.theme.PremiereAppli_CamilleKerherveTheme
 import kotlinx.serialization.Serializable
 
@@ -90,14 +90,28 @@ fun BarreNavigation() {
 
     val classWidth = windowSizeClass.windowWidthSizeClass
 
+
     Scaffold(
         topBar = {
             if (currentDestination?.hasRoute<HomeDest>() != true) {
                 when (classWidth) {
                     WindowWidthSizeClass.COMPACT ->
                         CompactTopBar(navController, currentDestination, viewModel)
-                    //else -> ExpandedTopBar(currentDestination, viewModel)
+                    else -> {}
                 }
+            }
+        },
+        floatingActionButton = {
+            if (classWidth != WindowWidthSizeClass.COMPACT && currentDestination?.hasRoute<HomeDest>() != true) {
+                SearchExpanded(navController, currentDestination, viewModel)
+//                FloatingActionButton(
+//                    onClick = { searchActive = !searchActive }
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Rounded.Search,
+//                        contentDescription = "Ouvrir la barre de recherche"
+//                    )
+//                }
             }
         },
         bottomBar = {
@@ -109,7 +123,9 @@ fun BarreNavigation() {
             }
         },
     ) { innerPadding ->
-        Row(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+        Row(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)) {
             if (classWidth != WindowWidthSizeClass.COMPACT && currentDestination?.hasRoute<HomeDest>() != true) {
                 SideBar(navController, currentDestination)
             }
@@ -120,8 +136,8 @@ fun BarreNavigation() {
                 ) {
                     composable<HomeDest> { Screen(navController, windowSizeClass) }
                     composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
-                    composable<ActeursDest> { ScreenActeurs(viewModel, navController) }
-                    composable<SeriesDest> { ScreenSeries(viewModel, navController) }
+                    composable<ActeursDest> { ScreenActeurs(viewModel, navController, classWidth) }
+                    composable<SeriesDest> { ScreenSeries(viewModel, navController, classWidth) }
 
                     composable(
                         "filmDetails/{filmId}",
@@ -266,9 +282,67 @@ fun CompactTopBar( navController: NavController, currentDestination: NavDestinat
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpandedTopBar(currentDestination: NavDestination?, viewModel: MainViewModel) {
+fun SearchExpanded(navController: NavController, currentDestination: NavDestination?, viewModel: MainViewModel) {
+    var searchActive by remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
+
+    LaunchedEffect(currentDestination) {
+        if (currentDestination?.hasRoute<HomeDest>() == true) {
+            searchActive = false
+            text = ""
+        }
+    }
+
+    if (searchActive) {
+        SearchBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(72.dp),
+            query = text,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = "recherche"
+                )
+            },
+            onQueryChange = { text = it },
+            onSearch = {
+                searchActive = false
+                when {
+                    currentDestination?.hasRoute<FilmsDest>() == true -> {
+                        viewModel.getFilmsbySearch(it)
+                    }
+                    currentDestination?.hasRoute<ActeursDest>() == true -> {
+                        viewModel.getActeursbySearch(it)
+                    }
+                    currentDestination?.hasRoute<SeriesDest>() == true -> {
+                        viewModel.getSeriesbySearch(it)
+                    }
+                }
+            },
+            active = searchActive,
+            onActiveChange = { searchActive = it },
+            placeholder = {
+                Text(text = "Recherchez...")
+            }
+        ){}
+    }
+
+    FloatingActionButton(
+        onClick = {
+            searchActive = !searchActive
+        },
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.Search,
+            contentDescription = "Ouvrir la barre de recherche"
+        )
+    }
 }
+
 
 
 
