@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ExitToApp
@@ -97,6 +98,7 @@ fun BarreNavigation() {
                 when (classWidth) {
                     WindowWidthSizeClass.COMPACT ->
                         CompactTopBar(navController, currentDestination, viewModel)
+
                     else -> {}
                 }
             }
@@ -123,9 +125,11 @@ fun BarreNavigation() {
             }
         },
     ) { innerPadding ->
-        Row(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             if (classWidth != WindowWidthSizeClass.COMPACT && currentDestination?.hasRoute<HomeDest>() != true) {
                 SideBar(navController, currentDestination)
             }
@@ -188,7 +192,45 @@ fun BarreNavigation() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompactTopBar( navController: NavController, currentDestination: NavDestination?, viewModel: MainViewModel) {
+fun SearchBarAppli(
+    modifier: Modifier = Modifier,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    active: Boolean,
+    onActiveChange: (Boolean) -> Unit
+) {
+    SearchBar(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(72.dp),
+        query = query,
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Rounded.Search,
+                contentDescription = "recherche"
+            )
+        },
+        onQueryChange = onQueryChange,
+        onSearch = {
+            onSearch(it) // Lance la recherche
+            onActiveChange(false) // Ferme la barre de recherche après la recherche
+        },
+        active = active,
+        onActiveChange = onActiveChange,
+        placeholder = {
+            Text(text = "Recherchez...")
+        }
+    ){}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CompactTopBar(
+    navController: NavController,
+    currentDestination: NavDestination?,
+    viewModel: MainViewModel
+) {
     var searchActive by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
 
@@ -209,41 +251,25 @@ fun CompactTopBar( navController: NavController, currentDestination: NavDestinat
                 }
                 // Cas 2 : Affiche la SearchBar si la recherche est active
                 searchActive -> {
-                    SearchBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(72.dp),
+                    SearchBarAppli(
                         query = text,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Search,
-                                contentDescription = "recherche"
-                            )
-                        },
                         onQueryChange = { text = it },
-                        onSearch = {
-                            // Lance la recherche et ferme la barre de recherche
-                            searchActive = false
+                        onSearch = { query ->
                             when {
                                 currentDestination?.hasRoute<FilmsDest>() == true -> {
-                                    viewModel.getFilmsbySearch(it)
+                                    viewModel.getFilmsbySearch(query)
                                 }
-
                                 currentDestination?.hasRoute<ActeursDest>() == true -> {
-                                    viewModel.getActeursbySearch(it)
+                                    viewModel.getActeursbySearch(query)
                                 }
-
                                 currentDestination?.hasRoute<SeriesDest>() == true -> {
-                                    viewModel.getSeriesbySearch(it)
+                                    viewModel.getSeriesbySearch(query)
                                 }
                             }
                         },
                         active = searchActive,
-                        onActiveChange = { searchActive = it },
-                        placeholder = {
-                            Text(text = "Recherchez...")
-                        }
-                    ) {}
+                        onActiveChange = { searchActive = it }
+                    )
                 }
                 // Cas 3 : Affiche le texte par défaut si la recherche n'est pas active
                 else -> {
@@ -266,11 +292,7 @@ fun CompactTopBar( navController: NavController, currentDestination: NavDestinat
                 }
             } else {
                 IconButton(onClick = {
-                    if (searchActive) {
-                        searchActive = false // Ferme la barre de recherche
-                    } else {
-                        searchActive = true // Ouvre la barre de recherche
-                    }
+                    searchActive = !searchActive // Toggle de l'état de la barre de recherche
                 }) {
                     Icon(
                         imageVector = if (searchActive) Icons.Rounded.ArrowBack else Icons.Rounded.Search,
@@ -282,9 +304,12 @@ fun CompactTopBar( navController: NavController, currentDestination: NavDestinat
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchExpanded(navController: NavController, currentDestination: NavDestination?, viewModel: MainViewModel) {
+fun SearchExpanded(
+    navController: NavController,
+    currentDestination: NavDestination?,
+    viewModel: MainViewModel
+) {
     var searchActive by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("") }
 
@@ -296,54 +321,61 @@ fun SearchExpanded(navController: NavController, currentDestination: NavDestinat
     }
 
     if (searchActive) {
-        SearchBar(
+        SearchBarAppli(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(72.dp),
+                .width(400.dp)
+                .height(190.dp)
+                .padding(vertical = 50.dp),
             query = text,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = "recherche"
-                )
-            },
             onQueryChange = { text = it },
-            onSearch = {
+            onSearch = { query ->
                 searchActive = false
                 when {
                     currentDestination?.hasRoute<FilmsDest>() == true -> {
-                        viewModel.getFilmsbySearch(it)
+                        viewModel.getFilmsbySearch(query)
                     }
                     currentDestination?.hasRoute<ActeursDest>() == true -> {
-                        viewModel.getActeursbySearch(it)
+                        viewModel.getActeursbySearch(query)
                     }
                     currentDestination?.hasRoute<SeriesDest>() == true -> {
-                        viewModel.getSeriesbySearch(it)
+                        viewModel.getSeriesbySearch(query)
                     }
                 }
             },
             active = searchActive,
-            onActiveChange = { searchActive = it },
-            placeholder = {
-                Text(text = "Recherchez...")
-            }
-        ){}
-    }
-
-    FloatingActionButton(
-        onClick = {
-            searchActive = !searchActive
-        },
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.Search,
-            contentDescription = "Ouvrir la barre de recherche"
+            onActiveChange = { searchActive = it }
         )
     }
+
+    if (currentDestination?.route == "filmDetails/{filmId}"
+        || currentDestination?.route == "serieDetails/{serieId}"
+        || currentDestination?.route == "acteurDetails/{actorId}"
+    ) {
+        FloatingActionButton(
+            onClick = {
+                navController.navigateUp()
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.ExitToApp,
+                contentDescription = "Retour"
+            )
+        }
+    } else {
+        FloatingActionButton(
+            onClick = {
+                searchActive = !searchActive
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Search,
+                contentDescription = "Ouvrir la barre de recherche"
+            )
+        }
+    }
 }
-
-
 
 
 @Composable
@@ -391,7 +423,7 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
 @Composable
 fun SideBar(navController: NavController, currentDestination: NavDestination?) {
     Column(modifier = Modifier.fillMaxHeight()) {
-        NavigationRail{
+        NavigationRail {
             NavigationRailItem(
                 modifier = Modifier.weight(1f),
                 icon = {
