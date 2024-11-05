@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -41,7 +43,7 @@ fun ScreenActeurs(viewModel: MainViewModel= viewModel(), navController: NavContr
 
     val columns = when (classWidth) {
         WindowWidthSizeClass.COMPACT -> 2
-        else -> 3
+        else -> 4
     }
 
     Column {
@@ -68,60 +70,67 @@ fun ScreenActeurs(viewModel: MainViewModel= viewModel(), navController: NavContr
 }
 
 @Composable
-fun ActorItem(actor: ModelActeurs, navController: NavController){
+fun ActorItem(actor: ModelActeurs, navController: NavController) {
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val classWidth = windowSizeClass.windowWidthSizeClass
 
-    Column(modifier = Modifier
-        .padding(5.dp)
-        .clickable {
-            navController.navigate("acteurDetails/${actor.id}")
-        }
-        .background(Color(0xFFFFFFFF))
-        .border(
-            BorderStroke(2.dp, Color(0xFFBBD2E1)), RoundedCornerShape(4.dp)
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable {
+                navController.navigate("acteurDetails/${actor.id}")
+            },
+        colors = CardDefaults.cardColors(
+            //containerColor = Color(0xFFb3ff7a) ,
+            contentColor = Color.Black
         )
-        .padding(8.dp)
-    )  {
-        when (classWidth) {
-            WindowWidthSizeClass.COMPACT ->
-                if (actor.profile_path != null) {
+    )
+    {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            when (classWidth) {
+                WindowWidthSizeClass.COMPACT ->
+                    if (actor.profile_path != null) {
 
-                    AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w780${actor.profile_path}",
-                        contentDescription = null,
-                        modifier = Modifier
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w780${actor.profile_path}",
+                            contentDescription = null,
+                            modifier = Modifier
 
-                            .fillMaxSize()
-                            .padding(4.dp),
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(R.drawable.paysage),
-                        contentDescription = "Description de l'image",
-                        modifier = Modifier
-                            .fillMaxSize()
-                    )
-                }
-            else ->
-                if (actor.profile_path != null) {
+                                .fillMaxSize()
+                                .padding(4.dp),
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(R.drawable.paysage),
+                            contentDescription = "Description de l'image",
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    }
 
-                    AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w780${actor.profile_path}",
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(350.dp, 400.dp)
-                            .padding(4.dp),
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(R.drawable.paysage),
-                        contentDescription = "Description de l'image",
-                        modifier = Modifier
-                            .size(350.dp, 400.dp)
-                    )
-                }
+                else ->
+                    if (actor.profile_path != null) {
+
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w780${actor.profile_path}",
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(350.dp, 400.dp)
+                                .padding(4.dp),
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(R.drawable.paysage),
+                            contentDescription = "Description de l'image",
+                            modifier = Modifier
+                                .size(350.dp, 400.dp)
+                        )
+                    }
+            }
+            Text(actor.name)
         }
-        Text(actor.name)
     }
 }
