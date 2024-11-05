@@ -37,27 +37,27 @@ class MainViewModel : ViewModel() {
 
     fun getMovies() {
         viewModelScope.launch {
-            listmovies.value = api.trendingmovies(api_key).results
+            listmovies.value = api.trendingmovies(api_key, "fr").results
         }
     }
 
 
     fun getActors() {
         viewModelScope.launch {
-            listactors.value = api.trendingactors(api_key).results
+            listactors.value = api.trendingactors(api_key, "fr").results
         }
     }
 
     fun getSeries() {
         viewModelScope.launch {
-            listseries.value = api.trendingseries(api_key).results
+            listseries.value = api.trendingseries(api_key, "fr").results
         }
     }
 
     fun getFilmbyId(filmId:Int){
         viewModelScope.launch{
             try{
-                val filmDetails = api.getFilmDetails(filmId, api_key, "credits")
+                val filmDetails = api.getFilmDetails(filmId, api_key, "credits", "fr")
                 _selectedFilm.value=filmDetails
             }catch(e: Exception){
                 e.printStackTrace()
@@ -68,7 +68,7 @@ class MainViewModel : ViewModel() {
     fun getSeriebyId(serieId:Int){
         viewModelScope.launch{
             try{
-                val serieDetails = api.getSerieDetails(serieId, api_key, "credits")
+                val serieDetails = api.getSerieDetails(serieId, api_key, "credits", "fr")
                 _selectedSerie.value=serieDetails
             }catch(e: Exception){
                 e.printStackTrace()
@@ -79,7 +79,7 @@ class MainViewModel : ViewModel() {
     fun getActeurbyId(acteurId:Int){
         viewModelScope.launch{
             try{
-                val acteurDetails = api.getActeurDetails(acteurId, api_key, "credits")
+                val acteurDetails = api.getActeurDetails(acteurId, api_key, "credits", "fr")
                 _selectedActeur.value=acteurDetails
             }catch(e: Exception){
                 e.printStackTrace()
@@ -89,19 +89,19 @@ class MainViewModel : ViewModel() {
 
     fun getFilmsbySearch(query: String){
         viewModelScope.launch {
-            listmovies.value = api.filmsSearch(api_key, query).results
+            listmovies.value = api.filmsSearch(api_key, query, "fr").results
         }
     }
 
     fun getSeriesbySearch(query: String){
         viewModelScope.launch {
-            listseries.value = api.seriesSearch(api_key, query).results
+            listseries.value = api.seriesSearch(api_key, query, "fr").results
         }
     }
 
     fun getActeursbySearch(query: String){
         viewModelScope.launch {
-            listactors.value = api.acteursSearch(api_key, query).results
+            listactors.value = api.acteursSearch(api_key, query,"fr").results
         }
     }
 }

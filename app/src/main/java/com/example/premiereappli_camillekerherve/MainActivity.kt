@@ -99,27 +99,26 @@ fun BarreNavigation() {
                     WindowWidthSizeClass.COMPACT ->
                         CompactTopBar(navController, currentDestination, viewModel)
 
+                    WindowWidthSizeClass.MEDIUM ->
+                        CompactTopBar(navController, currentDestination, viewModel)
+
                     else -> {}
                 }
             }
         },
         floatingActionButton = {
-            if (classWidth != WindowWidthSizeClass.COMPACT && currentDestination?.hasRoute<HomeDest>() != true) {
+            if (classWidth != WindowWidthSizeClass.COMPACT
+                && classWidth != WindowWidthSizeClass.MEDIUM
+                && currentDestination?.hasRoute<HomeDest>() != true
+            ) {
                 SearchExpanded(navController, currentDestination, viewModel)
-//                FloatingActionButton(
-//                    onClick = { searchActive = !searchActive }
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Rounded.Search,
-//                        contentDescription = "Ouvrir la barre de recherche"
-//                    )
-//                }
             }
         },
         bottomBar = {
             if (currentDestination?.hasRoute<HomeDest>() != true) {
                 when (classWidth) {
                     WindowWidthSizeClass.COMPACT -> BottomBar(navController, currentDestination)
+                    WindowWidthSizeClass.MEDIUM -> BottomBar(navController, currentDestination)
                     else -> {}
                 }
             }
@@ -130,7 +129,10 @@ fun BarreNavigation() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (classWidth != WindowWidthSizeClass.COMPACT && currentDestination?.hasRoute<HomeDest>() != true) {
+            if (classWidth != WindowWidthSizeClass.COMPACT
+                && classWidth != WindowWidthSizeClass.MEDIUM
+                && currentDestination?.hasRoute<HomeDest>() != true
+            ) {
                 SideBar(navController, currentDestination)
             }
             Column(modifier = Modifier.fillMaxSize()) {
@@ -221,7 +223,7 @@ fun SearchBarAppli(
         placeholder = {
             Text(text = "Recherchez...")
         }
-    ){}
+    ) {}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -259,9 +261,11 @@ fun CompactTopBar(
                                 currentDestination?.hasRoute<FilmsDest>() == true -> {
                                     viewModel.getFilmsbySearch(query)
                                 }
+
                                 currentDestination?.hasRoute<ActeursDest>() == true -> {
                                     viewModel.getActeursbySearch(query)
                                 }
+
                                 currentDestination?.hasRoute<SeriesDest>() == true -> {
                                     viewModel.getSeriesbySearch(query)
                                 }
@@ -334,9 +338,11 @@ fun SearchExpanded(
                     currentDestination?.hasRoute<FilmsDest>() == true -> {
                         viewModel.getFilmsbySearch(query)
                     }
+
                     currentDestination?.hasRoute<ActeursDest>() == true -> {
                         viewModel.getActeursbySearch(query)
                     }
+
                     currentDestination?.hasRoute<SeriesDest>() == true -> {
                         viewModel.getSeriesbySearch(query)
                     }
@@ -370,8 +376,8 @@ fun SearchExpanded(
             modifier = Modifier.padding(16.dp)
         ) {
             Icon(
-                imageVector = Icons.Rounded.Search,
-                contentDescription = "Ouvrir la barre de recherche"
+                imageVector = if (searchActive) Icons.Rounded.ArrowBack else Icons.Rounded.Search,
+                contentDescription = if (searchActive) "Fermer la barre de recherche" else "Ouvrir la barre de recherche"
             )
         }
     }
