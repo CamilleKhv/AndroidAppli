@@ -2,6 +2,7 @@ package com.example.premiereappli_camillekerherve
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +28,9 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.ui.graphics.Color
+import androidx.window.core.layout.WindowWidthSizeClass
 
 @Composable
 fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: NavController) {
@@ -37,6 +40,14 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
     }
 
     val serie by viewModel.selectedSerie.collectAsState()
+
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val classWidth = windowSizeClass.windowWidthSizeClass
+
+    val columns = when (classWidth) {
+        WindowWidthSizeClass.COMPACT -> 2
+        else -> 4
+    }
 
     serie?.let { serieDetails ->
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -135,83 +146,56 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
                 ) {
                     val acteurs = serieDetails.credits.cast
 
-                    for (i in acteurs.indices step 2) {
+
+                    for (i in acteurs.indices step columns) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly // Espacement uniforme
                         ) {
-                            // Premier acteur de la ligne
-                            val acteur1 = acteurs[i]
-                            Card(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(8.dp)
-                                    .clickable {
-                                        navController.navigate("ActeurDetails/${acteur1.id}")
-                                    },
-                                colors = CardDefaults.cardColors(
-                                    contentColor = Color.Black
-                                )
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(8.dp)
-                                ) {
-                                    if (acteur1.profile_path != null) {
-                                        AsyncImage(
-                                            model = "https://image.tmdb.org/t/p/w780${acteur1.profile_path}",
-                                            contentDescription = null,
-                                            modifier = Modifier.fillMaxWidth()
+                            // Ajouter un acteur à la ligne
+                            for (j in 0 until columns) {
+                                if (i + j < acteurs.size) {
+                                    val acteur = acteurs[i + j]
+                                    Card(
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .weight(1f) // Faire en sorte que chaque carte prenne le même espace
+                                            .clickable {
+                                                navController.navigate("ActeurDetails/${acteur.id}")
+                                            },
+                                        colors = CardDefaults.cardColors(
+                                            contentColor = Color.Black
                                         )
-                                    } else {
-                                        Image(
-                                            painter = painterResource(R.drawable.paysage),
-                                            contentDescription = "Description de l'image",
-                                            modifier = Modifier.fillMaxSize()
-                                        )
-                                    }
-                                    Text(
-                                        text = acteur1.name,
-                                        modifier = Modifier.padding(2.dp)
-                                    )
-                                }
-                            }
-
-                            if (i + 1 < acteurs.size) {
-                                val acteur2 = acteurs[i + 1]
-                                Card(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .padding(8.dp)
-                                        .clickable {
-                                            navController.navigate("ActeurDetails/${acteur2.id}")
-                                        },
-                                    colors = CardDefaults.cardColors(
-                                        contentColor = Color.Black
-                                    )
-                                ) {
-                                    Column(
-                                        modifier = Modifier.padding(8.dp)
                                     ) {
-                                        if (acteur2.profile_path != null) {
-                                            AsyncImage(
-                                                model = "https://image.tmdb.org/t/p/w780${acteur2.profile_path}",
-                                                contentDescription = null,
-                                                modifier = Modifier.fillMaxWidth()
-                                            )
-                                        } else {
-                                            Image(
-                                                painter = painterResource(R.drawable.paysage),
-                                                contentDescription = "Description de l'image",
-                                                modifier = Modifier.fillMaxSize()
+                                        Column(
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                                .fillMaxWidth()
+                                        ) {
+                                            if (acteur.profile_path != null) {
+                                                AsyncImage(
+                                                    model = "https://image.tmdb.org/t/p/w780${acteur.profile_path}",
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                )
+                                            } else {
+                                                Image(
+                                                    painter = painterResource(R.drawable.paysage),
+                                                    contentDescription = "Description de l'image",
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                )
+                                            }
+                                            Text(
+                                                text = acteur.name,
+                                                modifier = Modifier.padding(4.dp)
                                             )
                                         }
-                                        Text(
-                                            text = acteur2.name,
-                                            modifier = Modifier.padding(2.dp)
-                                        )
                                     }
+                                } else {
+                                    Spacer(modifier = Modifier.weight(1f))
                                 }
-                            } else {
-                                Spacer(modifier = Modifier.weight(1f))
                             }
                         }
                     }
