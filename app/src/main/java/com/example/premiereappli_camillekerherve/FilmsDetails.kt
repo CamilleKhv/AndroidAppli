@@ -3,7 +3,6 @@ package com.example.premiereappli_camillekerherve
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -98,7 +97,7 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
                         )
                     } else {
                         Image(
-                            painter = painterResource(R.drawable.paysage),  // Image locale dans drawable
+                            painter = painterResource(R.drawable.paysage),
                             contentDescription = "Description de l'image",
                             modifier = Modifier
                                 .width(150.dp)
@@ -150,7 +149,7 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
                     for (i in acteurs.indices step columns) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly // Espacement uniforme
+                            horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             // Ajouter un acteur à la ligne
                             for (j in 0 until columns) {
@@ -159,7 +158,7 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
                                     Card(
                                         modifier = Modifier
                                             .padding(4.dp)
-                                            .weight(1f) // Faire en sorte que chaque carte prenne le même espace
+                                            .weight(1f)
                                             .clickable {
                                                 navController.navigate("ActeurDetails/${acteur.id}")
                                             },

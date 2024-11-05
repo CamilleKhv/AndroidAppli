@@ -95,7 +95,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
                         )
                     }else{
                         Image(
-                            painter = painterResource(R.drawable.paysage),  // Image locale dans drawable
+                            painter = painterResource(R.drawable.paysage),
                             contentDescription = "Description de l'image",
                             modifier = Modifier
                                 .width(150.dp)
@@ -150,7 +150,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
                     for (i in acteurs.indices step columns) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly // Espacement uniforme
+                            horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             // Ajouter un acteur à la ligne
                             for (j in 0 until columns) {
@@ -159,7 +159,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
                                     Card(
                                         modifier = Modifier
                                             .padding(4.dp)
-                                            .weight(1f) // Faire en sorte que chaque carte prenne le même espace
+                                            .weight(1f)
                                             .clickable {
                                                 navController.navigate("ActeurDetails/${acteur.id}")
                                             },
