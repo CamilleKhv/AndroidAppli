@@ -51,26 +51,31 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
 
     serie?.let { serieDetails ->
         LazyColumn(modifier = Modifier.fillMaxSize()) {
+
             if (serieDetails.poster_path != null) {
                 item {
-                    if (serieDetails.backdrop_path != null) {
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w780${serieDetails.backdrop_path}",
-                            contentDescription = "Image de la série",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(250.dp),
-                            contentScale = ContentScale.Crop,
-                        )
-                    } else {
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w780${serieDetails.poster_path}",
-                            contentDescription = "Image de la série",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(250.dp),
-                            contentScale = ContentScale.Crop,
-                        )
+                    when (classWidth) {
+                        WindowWidthSizeClass.COMPACT ->
+                            if (serieDetails.backdrop_path != null) {
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w780${serieDetails.backdrop_path}",
+                                    contentDescription = "Image de la série",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(250.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            } else {
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w780${serieDetails.poster_path}",
+                                    contentDescription = "Image de la série",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(250.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
+                        else -> {}
                     }
                 }
             }

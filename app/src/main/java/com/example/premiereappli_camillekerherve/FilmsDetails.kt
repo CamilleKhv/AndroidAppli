@@ -54,24 +54,28 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
 
             if (filmDetails.poster_path != null) {
                 item {
-                    if (filmDetails.backdrop_path != null) {
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w780${filmDetails.backdrop_path}",
-                            contentDescription = "Image du film",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(250.dp),
-                            contentScale = ContentScale.Crop,
-                        )
-                    } else {
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w780${filmDetails.poster_path}",
-                            contentDescription = "Image du film",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(250.dp),
-                            contentScale = ContentScale.Crop,
-                        )
+                    when (classWidth) {
+                        WindowWidthSizeClass.COMPACT ->
+                            if (filmDetails.backdrop_path != null) {
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w780${filmDetails.backdrop_path}",
+                                    contentDescription = "Image du film",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(250.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            } else {
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w780${filmDetails.poster_path}",
+                                    contentDescription = "Image du film",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(250.dp),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
+                        else -> {}
                     }
                 }
             }
