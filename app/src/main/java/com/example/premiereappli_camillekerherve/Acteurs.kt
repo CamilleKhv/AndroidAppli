@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -118,7 +119,7 @@ fun ActorItem(actor: ModelActeurs, navController: NavController) {
                             model = "https://image.tmdb.org/t/p/w780${actor.profile_path}",
                             contentDescription = null,
                             modifier = Modifier
-                                .size(350.dp, 400.dp)
+                                .fillMaxSize()
                                 .padding(4.dp),
                         )
                     } else {
@@ -126,7 +127,8 @@ fun ActorItem(actor: ModelActeurs, navController: NavController) {
                             painter = painterResource(R.drawable.paysage),
                             contentDescription = "Description de l'image",
                             modifier = Modifier
-                                .size(350.dp, 400.dp)
+                                .fillMaxSize()
+                                .padding(4.dp),
                         )
                     }
             }
