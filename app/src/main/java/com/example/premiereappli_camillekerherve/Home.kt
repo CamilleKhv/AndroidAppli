@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.window.core.layout.WindowSizeClass
@@ -36,65 +38,64 @@ import androidx.window.core.layout.WindowWidthSizeClass
 @Composable
 fun Screen(navHostController: NavHostController, classes: WindowSizeClass) {
     val classWidth = classes.windowWidthSizeClass
-    when (classWidth) {
-        WindowWidthSizeClass.COMPACT -> /* largeur faible */ {
+    if (classWidth == WindowWidthSizeClass.COMPACT
+        || classWidth == WindowWidthSizeClass.MEDIUM
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ImageProfile()
+            Spacer(modifier = Modifier.height(7.dp))
+            TitleText()
+            Spacer(modifier = Modifier.height(25.dp))
+            Description()
+            Spacer(modifier = Modifier.height(45.dp))
+            UsefulLink()
+            Spacer(modifier = Modifier.height(55.dp))
+            SearchButton(navHostController)
+        }
+    } else {
+        Row(
+            Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(70.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ImageProfile()
-                Spacer(modifier = Modifier.height(7.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 TitleText()
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Description()
-                Spacer(modifier = Modifier.height(45.dp))
+            }
+            Column(
+                modifier = Modifier
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 UsefulLink()
-                Spacer(modifier = Modifier.height(55.dp))
+                Spacer(modifier = Modifier.height(40.dp))
                 SearchButton(navHostController)
             }
         }
 
-        else -> {
-            Row(
-                Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(70.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ImageProfile()
-                    Spacer(modifier = Modifier.height(5.dp))
-                    TitleText()
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Description()
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(10.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    UsefulLink()
-                    Spacer(modifier = Modifier.height(40.dp))
-                    SearchButton(navHostController)
-                }
-            }
 
-
-        }
     }
 }
+
 @Composable
 fun ImageProfile() {
     Box(
         modifier = Modifier
-            .size(150.dp) // Taille de l'image + bordure
+            .size(125.dp)
     )
     {
         Image(
@@ -104,8 +105,8 @@ fun ImageProfile() {
                 .fillMaxSize()
                 .clip(CircleShape)
                 .border(
-                    BorderStroke(4.dp, Color.Black),
-                    CircleShape
+                    BorderStroke(4.dp, Color(94, 31, 31, 255)),
+                    CircleShape,
                 )
         )
     }
@@ -171,7 +172,10 @@ fun UsefulLink() {
 
 @Composable
 fun SearchButton(navController: NavHostController) {
-    Button(onClick = { navController.navigate(FilmsDest())  }) {
-        Text(text = "Démarrer")
+    Button(
+        onClick = { navController.navigate(FilmsDest()) },
+        modifier = Modifier.size(width = 150.dp, height = 50.dp),
+    ) {
+        Text(text = "Démarrer", fontSize = 17.sp)
     }
 }

@@ -75,11 +75,19 @@ fun ScreenActeursDetails(viewModel: MainViewModel, acteurId: Int) {
             }
             if (acteurDetails.biography !="") {
                 item {
-                    Text(acteurDetails.biography)
+                    Text(
+                        text = acteurDetails.biography,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             } else {
                 item {
-                    Text(text = "Pas d'information")
+                    Text(
+                        text = "Pas d'information",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
 

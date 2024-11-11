@@ -36,12 +36,13 @@ fun ScreenFilms(viewModel: MainViewModel= viewModel(), navController: NavControl
 
     val columns = when (classWidth) {
         WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
         else -> 4
     }
 
         Column {
             Text(
-                "Liste des films",
+                "  Liste des films",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -73,7 +74,7 @@ fun MovieItem(movie: ModelMovies, navController: NavController) {
                 navController.navigate("filmDetails/${movie.id}")
             },
         colors = CardDefaults.cardColors(
-            //containerColor = Color(0xFFb3ff7a) ,
+            containerColor = Color(241, 119, 119, 255),
             contentColor = Color.Black
         )
     )
@@ -85,7 +86,6 @@ fun MovieItem(movie: ModelMovies, navController: NavController) {
             when (classWidth) {
                 WindowWidthSizeClass.COMPACT ->
                     if (movie.poster_path != null) {
-
                         AsyncImage(
                             model = "https://image.tmdb.org/t/p/w780${movie.poster_path}",
                             contentDescription = null,

@@ -44,12 +44,13 @@ fun ScreenActeurs(viewModel: MainViewModel= viewModel(), navController: NavContr
 
     val columns = when (classWidth) {
         WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
         else -> 4
     }
 
     Column {
         Text(
-            "Liste des acteurs",
+            "  Liste des acteurs",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold
         )
@@ -82,7 +83,7 @@ fun ActorItem(actor: ModelActeurs, navController: NavController) {
                 navController.navigate("acteurDetails/${actor.id}")
             },
         colors = CardDefaults.cardColors(
-            //containerColor = Color(0xFFb3ff7a) ,
+            containerColor = Color(241, 119, 119, 255) ,
             contentColor = Color.Black
         )
     )

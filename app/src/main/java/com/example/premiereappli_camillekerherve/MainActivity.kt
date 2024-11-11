@@ -52,6 +52,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import com.example.premiereappli_camillekerherve.ui.theme.PremiereAppli_CamilleKerherveTheme
 import kotlinx.serialization.Serializable
 
@@ -221,7 +227,10 @@ fun SearchBarAppli(
         onActiveChange = onActiveChange,
         placeholder = {
             Text(text = "Recherchez...")
-        }
+        },
+        colors = SearchBarDefaults.colors(
+            containerColor =  Color(250, 140, 140, 255)
+        )
     ) {}
 }
 
@@ -303,7 +312,10 @@ fun CompactTopBar(
                     )
                 }
             }
-        }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(255, 88, 88, 255)
+        ),
     )
 }
 
@@ -360,7 +372,8 @@ fun SearchExpanded(
             onClick = {
                 navController.navigateUp()
             },
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            containerColor = Color(255, 88, 88, 255)
         ) {
             Icon(
                 imageVector = Icons.Rounded.ExitToApp,
@@ -372,7 +385,8 @@ fun SearchExpanded(
             onClick = {
                 searchActive = !searchActive
             },
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            containerColor = Color(255, 88, 88, 255)
         ) {
             Icon(
                 imageVector = if (searchActive) Icons.Rounded.ArrowBack else Icons.Rounded.Search,
@@ -385,17 +399,20 @@ fun SearchExpanded(
 
 @Composable
 fun BottomBar(navController: NavController, currentDestination: NavDestination?) {
-    NavigationBar {
+    NavigationBar(containerColor = Color(255, 88, 88, 255)) {
         NavigationBarItem(
             icon = {
                 Image(
                     painter = painterResource(R.drawable.operateur_camera),
                     contentDescription = "Logo Films",
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             },
-            label = { Text("Films") },
+            label = { Text(text = "Films", fontSize = 16.sp) },
             selected = currentDestination?.hasRoute<FilmsDest>() == true,
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color(196, 71, 71, 255)
+            ),
             onClick = { navController.navigate(FilmsDest()) }
         )
         NavigationBarItem(
@@ -403,11 +420,14 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
                 Image(
                     painter = painterResource(R.drawable.smart),
                     contentDescription = "Logo series",
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             },
-            label = { Text("Séries") },
+            label = { Text(text = "Séries", fontSize = 16.sp) },
             selected = currentDestination?.hasRoute<SeriesDest>() == true,
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color(196, 71, 71, 255)
+            ),
             onClick = { navController.navigate(SeriesDest()) }
         )
         NavigationBarItem(
@@ -415,11 +435,14 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
                 Image(
                     painter = painterResource(R.drawable.personne_debout),
                     contentDescription = "Logo acteurs",
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             },
-            label = { Text("Acteurs") },
+            label = { Text(text = "Acteurs", fontSize = 16.sp) },
             selected = currentDestination?.hasRoute<ActeursDest>() == true,
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color(196, 71, 71, 255)
+            ),
             onClick = { navController.navigate(ActeursDest()) }
         )
     }
@@ -428,18 +451,21 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
 @Composable
 fun SideBar(navController: NavController, currentDestination: NavDestination?) {
     Column(modifier = Modifier.fillMaxHeight()) {
-        NavigationRail {
+        NavigationRail(containerColor = Color(255, 88, 88, 255)) {
             NavigationRailItem(
                 modifier = Modifier.weight(1f),
                 icon = {
                     Image(
                         painter = painterResource(R.drawable.operateur_camera),
                         contentDescription = "Logo Films",
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                 },
-                label = { Text("Films") },
+                label = { Text(text = "Films", fontSize = 14.sp)},
                 selected = currentDestination?.hasRoute<FilmsDest>() == true,
+                colors = NavigationRailItemDefaults.colors(
+                    indicatorColor = Color(196, 71, 71, 255)
+                ),
                 onClick = { navController.navigate(FilmsDest()) }
             )
             NavigationRailItem(
@@ -448,11 +474,14 @@ fun SideBar(navController: NavController, currentDestination: NavDestination?) {
                     Image(
                         painter = painterResource(R.drawable.smart),
                         contentDescription = "Logo series",
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                 },
-                label = { Text("Séries") },
+                label = { Text(text = "Séries", fontSize = 14.sp) },
                 selected = currentDestination?.hasRoute<SeriesDest>() == true,
+                colors = NavigationRailItemDefaults.colors(
+                    indicatorColor = Color(196, 71, 71, 255)
+                ),
                 onClick = { navController.navigate(SeriesDest()) }
             )
             NavigationRailItem(
@@ -461,11 +490,14 @@ fun SideBar(navController: NavController, currentDestination: NavDestination?) {
                     Image(
                         painter = painterResource(R.drawable.personne_debout),
                         contentDescription = "Logo acteurs",
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                 },
-                label = { Text("Acteurs") },
+                label = { Text(text = "Acteurs", fontSize = 14.sp) },
                 selected = currentDestination?.hasRoute<ActeursDest>() == true,
+                colors = NavigationRailItemDefaults.colors(
+                    indicatorColor = Color(196, 71, 71, 255)
+                ),
                 onClick = { navController.navigate(ActeursDest()) }
             )
         }

@@ -46,6 +46,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
 
     val columns = when (classWidth) {
         WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
         else -> 4
     }
 
@@ -115,6 +116,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
                         Text(text = "${serieDetails.genres.joinToString { it.name }}")
                         Text(text = "Nombre de saisons : ${serieDetails.number_of_seasons}")
                         Text(text = "Nombre d'épisodes : ${serieDetails.number_of_episodes}")
+                        Text(text = "Popularité : ${serieDetails.popularity}")
 
                     }
                 }
@@ -130,7 +132,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
             item {
                 Text(
                     text = serieDetails.overview,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp)
                 )
             }
@@ -169,6 +171,7 @@ fun ScreenSeriesDetails(viewModel: MainViewModel, serieId: Int, navController: N
                                                 navController.navigate("ActeurDetails/${acteur.id}")
                                             },
                                         colors = CardDefaults.cardColors(
+                                            containerColor = Color(241, 119, 119, 255),
                                             contentColor = Color.Black
                                         )
                                     ) {

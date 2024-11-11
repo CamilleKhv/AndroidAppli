@@ -41,12 +41,13 @@ fun ScreenSeries(viewModel: MainViewModel= viewModel(), navController: NavContro
 
     val columns = when (classWidth) {
         WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
         else -> 4
     }
 
     Column {
         Text(
-            "Liste des Séries",
+            "  Liste des Séries",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold
         )
@@ -79,7 +80,7 @@ fun SeriesItem(serie: ModelSeries, navController: NavController) {
                 navController.navigate("serieDetails/${serie.id}")
             },
         colors = CardDefaults.cardColors(
-            //containerColor = Color(0xFFb3ff7a) ,
+            containerColor = Color(241, 119, 119, 255) ,
             contentColor = Color.Black
         )
     )

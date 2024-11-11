@@ -46,6 +46,7 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
 
     val columns = when (classWidth) {
         WindowWidthSizeClass.COMPACT -> 2
+        WindowWidthSizeClass.MEDIUM -> 3
         else -> 4
     }
 
@@ -128,7 +129,7 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
             item {
                 Text(
                     text = filmDetails.overview,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp)
                 )
             }
@@ -167,6 +168,7 @@ fun ScreenFilmsDetails(viewModel: MainViewModel, filmId: Int, navController: Nav
                                                 navController.navigate("ActeurDetails/${acteur.id}")
                                             },
                                         colors = CardDefaults.cardColors(
+                                            containerColor = Color(241, 119, 119, 255),
                                             contentColor = Color.Black
                                         )
                                     ) {
