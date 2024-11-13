@@ -307,7 +307,7 @@ data class Cast(
 
 data class ExamCollection(
     val page: Int,
-    val results: List<Result>,
+    val results: List<ResultCollection>,
     val total_pages: Int,
     val total_results: Int
 )

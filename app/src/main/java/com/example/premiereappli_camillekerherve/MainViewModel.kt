@@ -23,6 +23,7 @@ class MainViewModel : ViewModel() {
     val listmovies = MutableStateFlow<List<ModelMovies>>(listOf())
     val listactors = MutableStateFlow<List<ModelActeurs>>(listOf())
     val listseries = MutableStateFlow<List<ModelSeries>>(listOf())
+    val listcollections = MutableStateFlow<List<ResultCollection>>(listOf())
 
     private val _selectedFilm = MutableStateFlow<ModelMovies?>(null)
     val selectedFilm: StateFlow<ModelMovies?> = _selectedFilm
@@ -34,6 +35,13 @@ class MainViewModel : ViewModel() {
     val selectedActeur: StateFlow<ModelActeurs?> = _selectedActeur
 
     val api_key = "b57151d36fecd1b693da830a2bc5766f";
+
+
+    fun getCollection() {
+        viewModelScope.launch {
+            listcollections.value = api.collection(api_key, "horror", "fr").results
+        }
+    }
 
     fun getMovies() {
         viewModelScope.launch {
