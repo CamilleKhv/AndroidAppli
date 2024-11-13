@@ -76,7 +76,6 @@ fun CollectionItem(collection: ResultCollection) {
     {
         Column {
             if (collection.poster_path != null) {
-
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/w780${collection.poster_path}",
                     contentDescription = null,

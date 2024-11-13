@@ -519,24 +519,22 @@ fun SideBar(navController: NavController, currentDestination: NavDestination?) {
                 ),
                 onClick = { navController.navigate(ActeursDest()) }
             )
-            NavigationRail(containerColor = Color(255, 88, 88, 255)) {
-                NavigationRailItem(
-                    modifier = Modifier.weight(1f),
-                    icon = {
-                        Image(
-                            painter = painterResource(R.drawable.collection),
-                            contentDescription = "Logo Collection",
-                            modifier = Modifier.size(30.dp)
-                        )
-                    },
-                    label = { Text(text = "Collections", fontSize = 14.sp) },
-                    selected = currentDestination?.hasRoute<ExamDest>() == true,
-                    colors = NavigationRailItemDefaults.colors(
-                        indicatorColor = Color(196, 71, 71, 255)
-                    ),
-                    onClick = { navController.navigate(ExamDest()) }
-                )
-            }
+            NavigationRailItem(
+                modifier = Modifier.weight(1f),
+                icon = {
+                    Image(
+                        painter = painterResource(R.drawable.collection),
+                        contentDescription = "Logo Collection",
+                        modifier = Modifier.size(30.dp)
+                    )
+                },
+                label = { Text(text = "Collections", fontSize = 14.sp) },
+                selected = currentDestination?.hasRoute<ExamDest>() == true,
+                colors = NavigationRailItemDefaults.colors(
+                    indicatorColor = Color(196, 71, 71, 255)
+                ),
+                onClick = { navController.navigate(ExamDest()) }
+            )
         }
     }
 }
