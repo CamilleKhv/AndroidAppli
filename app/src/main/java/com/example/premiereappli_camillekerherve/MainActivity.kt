@@ -152,7 +152,7 @@ fun BarreNavigation() {
                     composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
                     composable<ActeursDest> { ScreenActeurs(viewModel, navController, classWidth) }
                     composable<SeriesDest> { ScreenSeries(viewModel, navController, classWidth) }
-                    composable<ExamDest> { ScreenExam() }
+                    composable<ExamDest> { ScreenExam(viewModel) }
 
                     composable(
                         "filmDetails/{filmId}",
