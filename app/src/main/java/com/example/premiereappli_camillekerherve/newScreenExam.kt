@@ -74,21 +74,44 @@ fun CollectionItem(collection: ResultCollection) {
         )
     )
     {
-        Column {
-            if (collection.poster_path != null) {
-                AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w780${collection.poster_path}",
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
-            } else {
-                Image(
-                    painter = painterResource(R.drawable.paysage),
-                    contentDescription = "Description de l'image",
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            when (classWidth) {
+                WindowWidthSizeClass.COMPACT ->
+                    if (collection.poster_path != null) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w780${collection.poster_path}",
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(R.drawable.paysage),
+                            contentDescription = "Description de l'image",
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    }
+
+                else ->
+                    if (collection.poster_path != null) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w780${collection.poster_path}",
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(R.drawable.paysage),
+                            contentDescription = "Description de l'image",
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    }
             }
             Text(text = collection.name)
         }
