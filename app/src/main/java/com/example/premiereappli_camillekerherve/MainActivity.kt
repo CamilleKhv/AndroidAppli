@@ -73,6 +73,9 @@ class ActeursDest
 @Serializable
 class SeriesDest
 
+@Serializable
+class ExamDest
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,6 +152,7 @@ fun BarreNavigation() {
                     composable<FilmsDest> { ScreenFilms(viewModel, navController, classWidth) }
                     composable<ActeursDest> { ScreenActeurs(viewModel, navController, classWidth) }
                     composable<SeriesDest> { ScreenSeries(viewModel, navController, classWidth) }
+                    composable<ExamDest> { ScreenExam() }
 
                     composable(
                         "filmDetails/{filmId}",
@@ -229,7 +233,7 @@ fun SearchBarAppli(
             Text(text = "Recherchez...")
         },
         colors = SearchBarDefaults.colors(
-            containerColor =  Color(250, 140, 140, 255)
+            containerColor = Color(250, 140, 140, 255)
         )
     ) {}
 }
@@ -445,6 +449,21 @@ fun BottomBar(navController: NavController, currentDestination: NavDestination?)
             ),
             onClick = { navController.navigate(ActeursDest()) }
         )
+        NavigationBarItem(
+            icon = {
+                Image(
+                    painter = painterResource(R.drawable.collection),
+                    contentDescription = "Logo Collection",
+                    modifier = Modifier.size(30.dp)
+                )
+            },
+            label = { Text(text = "Collections", fontSize = 16.sp) },
+            selected = currentDestination?.hasRoute<ExamDest>() == true,
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color(196, 71, 71, 255)
+            ),
+            onClick = { navController.navigate(ExamDest()) }
+        )
     }
 }
 
@@ -461,7 +480,7 @@ fun SideBar(navController: NavController, currentDestination: NavDestination?) {
                         modifier = Modifier.size(30.dp)
                     )
                 },
-                label = { Text(text = "Films", fontSize = 14.sp)},
+                label = { Text(text = "Films", fontSize = 14.sp) },
                 selected = currentDestination?.hasRoute<FilmsDest>() == true,
                 colors = NavigationRailItemDefaults.colors(
                     indicatorColor = Color(196, 71, 71, 255)
@@ -500,6 +519,24 @@ fun SideBar(navController: NavController, currentDestination: NavDestination?) {
                 ),
                 onClick = { navController.navigate(ActeursDest()) }
             )
+            NavigationRail(containerColor = Color(255, 88, 88, 255)) {
+                NavigationRailItem(
+                    modifier = Modifier.weight(1f),
+                    icon = {
+                        Image(
+                            painter = painterResource(R.drawable.collection),
+                            contentDescription = "Logo Collection",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    },
+                    label = { Text(text = "Collections", fontSize = 14.sp) },
+                    selected = currentDestination?.hasRoute<ExamDest>() == true,
+                    colors = NavigationRailItemDefaults.colors(
+                        indicatorColor = Color(196, 71, 71, 255)
+                    ),
+                    onClick = { navController.navigate(ExamDest()) }
+                )
+            }
         }
     }
 }
